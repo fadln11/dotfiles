@@ -1,0 +1,213 @@
+" My dot vimrc
+
+" --- KeyMapping
+" UI  stufF
+set number
+set showcmd
+set cursorline
+set lazyredraw
+set showmatch           " highlight matching [{()}]
+" show filename at status bar
+set laststatus=2
+"set statusline=%f "tail of the filename
+set statusline+=%F "full file path
+
+
+" Tab stuff
+set tabstop=4           " width of hard tabstop measure in spaces
+set softtabstop=4       " make tab key insert spaces to simulate tabstop
+set expandtab           " tab as spaces
+
+
+" Searching
+set incsearch           " search as characters are entered
+set hlsearch            " highlight matches
+" turn off search highlight
+nnoremap <leader><space> :nohlsearch<CR>
+
+
+" Movement
+" move vertically by visual line
+nnoremap j gj
+nnoremap k gk
+" move to beginning/end of line --> emacs style
+nnoremap <c-a> ^
+nnoremap <c-e> $
+" $/^ doesn't do anything
+nnoremap $ <nop>
+nnoremap ^ <nop>
+" highlight last inserted text
+nnoremap gV `[v`]
+" tabs movement
+nnoremap <C-t><up> :tabr<cr>
+nnoremap <C-t><down> :tabl<cr>
+nnoremap <C-t><right> :tabn<cr>
+nnoremap <C-t><left> :tabp<cr>
+nnoremap <C-t>c :tabclose<cr>
+
+
+
+" Save files
+"inoremap <C-w> <esc>:w<cr>
+"nnoremap <C-w> :w<cr>
+
+
+" Set Backup dirs and move to /tmp dir
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
+
+
+" Use case insensitive search, except when using capital letters
+set ignorecase
+set smartcase
+
+
+" Use the same symbols as TextMate for tabstops and EOLs
+" set listchars=tab:>-,eol:¬,space:.
+
+
+" Show tabs as char
+set list
+set listchars=tab:>-,trail:-,space:.
+
+" hide hidden chars
+" set nolist
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+
+
+"Invisible character colors
+highlight NonText guifg=#4a4a59
+highlight SpecialKey guifg=#4a4a59
+
+
+" FileType specific
+" trim trailing whitespace
+autocmd FileType python autocmd BufWritePre <buffer> %s/\s\+$//e
+
+
+
+" Vim Window Split
+" Window Navigastion with Ctrl-[hjkl]
+noremap <C-J> <C-W>j
+noremap <C-K> <C-W>k
+noremap <C-H> <C-W>h
+noremap <C-L> <C-W>l
+
+set splitbelow
+set splitright
+
+
+" --- Vim-Plug
+" https://github.com/junegunn/vim-plug
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
+
+" Make sure you use single quotes
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+" Lightline
+Plug 'itchyny/lightline.vim'
+" Autocompletion
+Plug 'valloric/youcompleteme'
+"Plug '~/.vim/plugged/YouCompleteMe'
+
+" Any valid git URL is allowed
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+" Surround
+Plug 'https://github.com/tpope/vim-surround.git'
+
+" Multiple Plug commands can be written in a single line using | separators
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" On-demand loading
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
+" Using a non-master branch
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+Plug 'fatih/vim-go', { 'tag': '*' }
+
+" Plugin options
+Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+
+" Plugin outside ~/.vim/plugged with post-update hook
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+
+" Unmanaged plugin (manually installed and updated)
+Plug '~/my-prototype-plugin'
+
+" Initialize plugin system
+call plug#end()
+
+
+
+" --- fzf.vim
+" This is the default extra key bindings
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Default fzf layout
+" " - down / up / left / right
+let g:fzf_layout = { 'down': '~40%' }
+
+" In Neovim, you can set up fzf window using a Vim command
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10split enew' }
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+                        \ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" Enable per-command history.
+" " CTRL-N and CTRL-P will be automatically bound to next-history and
+" " previous-history instead of down and up. If you don't like the change,
+" " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+
+" --- Lightline
+let g:lightline = {
+ \ 'colorscheme': 'wombat',
+ \ 'active': {
+ \   'left': [['mode', 'paste'], ['absolutepath', 'modified']],
+ \   'right': [['lineinfo'], ['percent']]
+ \ },
+ \ }
+
+
+" --- NERDtree
+" KeyMapping
+nmap <F6> :NERDTreeToggle<CR>
+
+" Settings
+let NERDTreeQuitOnOpen=1

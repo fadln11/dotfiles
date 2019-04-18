@@ -1,0 +1,326 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+# append to the history file, don't overwrite it
+shopt -s histappend
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# HISTSIZE=1000
+# HISTFILESIZE=2000
+
+# Eternal bash history.
+# ---------------------
+# Undocumented feature which sets the size to "unlimited".
+# http://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTFILESIZE=-1
+export HISTSIZE=-1
+export HISTTIMEFORMAT="[%F %T] "
+export HISTIGNORE="pwd:df *:du:whoami:textura"  # ignore common commands
+# Change the file location because certain bash sessions truncate .bash_history file upon close.
+# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+export HISTFILE=~/.bash_eternal_history
+# Force prompt to write history after every command.
+# http://superuser.com/questions/20900/bash-history-loss
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+    else
+    color_prompt=
+    fi
+fi
+if [ "$color_prompt" = yes ]; then
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$ '
+    # using git-prompt.sh __git_ps1
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00;37m\]$(
+        __git_ps1 " (%s)")\[\033[00m\]$ '
+    # PS1='\h:\w$(__git_ps1 " (%s)")\$ '
+else
+    # PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    # PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\h:\w$(__git_ps1 " (%s)")\$ '
+    # PS1='[\u@\h \w$(__git_ps1 " (%s)")]\$ '
+fi
+unset color_prompt force_color_prompt
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\h: \w\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\h: \w\a\]$PS1"
+    # PS1='\u@\h \w$(__git_ps1 " (%s)")\$ '
+    ;;
+*)
+    ;;
+esac
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+
+
+
+
+
+
+
+
+
+
+################# ------------------
+# MI CUSTOMIZE
+################# ------------------
+
+
+###--- dvorka hh command
+
+# HSTR configuration - add this to ~/.bashrc
+# alias hh=hstr                    # hh to be alias for hstr
+export HSTR_CONFIG=hicolor       # get more colors
+shopt -s histappend              # append new history items to .bash_history
+export HISTCONTROL=ignorespace   # leading space hides commands from history
+# export HISTFILESIZE=10000        # increase history file size (default is 500)
+export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+# ensure synchronization between Bash memory and history file
+export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+# if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
+if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
+# if this is interactive shell, then bind 'kill last command' to Ctrl-x k
+if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
+
+# if this is interactive shell, then bind hh to Ctrl-r (for Vi mode check doc)
+# if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hh -- \C-j"'; fi
+# bind '"\C-r": "\C-ahh -- \C-j"'
+
+
+
+
+
+
+####---- Custom Key Bindings
+
+# use page up/down to search history
+bind '"\e[5~": history-search-backward'
+bind '"\e[6~": history-search-forward'
+
+
+
+
+
+
+
+
+####---- General stuff and alias
+
+alias renewbash='source $HOME/.bashrc'
+
+# all custom aliases are stored in both ~/.bash_profile and ~/.profile
+
+# unalias renewprofile
+# alias renewprofile='source $HOME/.bash_profile'
+# alias renewprofile='source $HOME/.profile'
+
+
+###--- dino day
+function dinosaur_day() {
+    date +%A | awk '{print toupper($0)}' | cowthink -f stegosaurus | lolcat
+}
+
+
+
+
+
+
+###--- virtualenvwrapper
+
+source $HOME/.local/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper.sh
+
+
+###--- alias stuff
+alias l='ls -CF'
+alias ll='ls -l'
+# alias ll='ls -alF'
+alias la='ls -lA'
+alias lla='ls -la'
+alias rm='rm -i'
+
+
+###--- git stuff
+
+source $HOME/bin/git-prompt.sh
+
+###--- git alias custom git info
+alias gi='. $HOME/bin/gitInfo'
+# alias gst='git status'
+
+
+###--- pyenv
+
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+# just use this .bashrc
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+# pyenv virtualenvwrapper init
+# pyenv virtualenvwrapper_lazy
+
+
+# to rememeber pyenv bin python location
+function pyenvpython(){
+    pyversion=$1
+    echo "$HOME/.pyenv/versions/${pyversion}/bin/python${pyversion}"
+}
+
+
+###--- coloured svn diff
+
+svndiff() {
+svn diff "${@}" | colordiff
+}
+
+# git diff color
+# export GIT_EXTERNAL_DIFF=$HOME/bin/diffy
+# so that ipdb not hang up with pytest or nosetests
+# somehow I didn't need this before??
+# export PYTHONUNBUFFERED=1
+
+
+###--- pytest
+# --> aliast in venv postactivate
+# alias pytest='pytest -s'
+
+
+
+
+###--- tmuxinator
+alias mux='tmuxinator'
+# completion file
+source $HOME/bin/tmuxinator.bash
+
+###--- tmux-resurrect
+source $HOME/wstools/tmux-resurrect/resurrect.tmux
+
+
+
+####---- Docker alias
+# stop all running containers
+alias docker-stopall='docker stop $(docker ps -aq)'
+# delete all containers
+alias docker-rmca='docker rm $(docker ps -aq)'
+# delete all images
+alias docker-rmia='docker rmi $(docker images -q)'
+
+
+
+####---- JDK stuff
+alias ws-java='cd $HOME/heyoo/javastuff'
+
+function runjava() {
+    filename=$1
+    printf "Running javac && java on ${filename} \n\n"
+    javac ${filename}.java && java ${filename}
+}
+
+
+
+####---- GO stuff
+alias ws-go='cd $GOPATH/src'
+# export PATH="$PATH:$GOPATH/bin"
+
+
+
+####---- cpp stuff
+# unalias g++
+alias ws-cpp='cd $HOME/heyoo/cppstuff'
+
+function  runcpp() {
+    filename=$1
+    # remove ".cpp" for outfile
+    outfile=`echo ${filename} | awk -F "." '{print $1;}'`
+
+    printf " ------ Compiling ${filename} && executing ${outfile}.o ----- \n\n\n"
+    # compie and execute outfile
+    g++ -Wall -Wextra ${filename} -o ${outfile}.o && ./${outfile}.o
+}
+
+
+
+
+
+
+function update_gcc() {
+    sudo apt-get update && \
+    sudo apt-get install build-essential software-properties-common -y && \
+    http_proxy=$proxy https_proxy=$proxy sudo -E add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
+    sudo apt-get update && \
+    sudo apt-get install gcc-snapshot -y && \
+    sudo apt-get update && \
+    sudo apt-get install gcc-7 g++-7 -y && \
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+    # sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7 && \
+    # sudo apt-get install gcc-6 g++-6 -y && \
+    # sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6;
+}

@@ -1,0 +1,32 @@
+[user]
+	name = fadln11
+	email = myemailhere@gmail.com
+[core]
+	editor = vi
+	eol = lf
+	autocrlf = false
+
+
+###--- Customize output
+
+[alias]
+        lol = log --graph --decorate --pretty=oneline --abbrev-commit
+        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+        st = status
+        aliases = "!git config --list | grep alias"
+
+[color]
+        branch = auto
+        diff = auto
+        interactive = auto
+        status = auto
+
+# side by side diff
+[diff]
+      tool = icdiff
+
+[difftool]
+      prompt = false
+
+[difftool "icdiff"]
+      cmd = /usr/local/bin/icdiff --line-numbers $LOCAL $REMOTE
