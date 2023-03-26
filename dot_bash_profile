@@ -1,0 +1,360 @@
+export BASH_CONF="bash_profile"
+
+# bash prompt
+# PS1= "\h:\W@\u\$ " --orig PS1
+# export PS1="\u@\h:\w$ "
+# export PS1="\h:\w$ "
+# export PS1='[\u@mbp \w$(__git_ps1)]\$ '
+# GIT_PS1_SHOWDIRTYSTATE=true
+
+# export PS1='\h:\w$(__git_ps1 " (%s)") \$ '
+
+# add color
+# \[\033[00m\] default
+# \[\033[01;32m\] bold green
+# \[\033[01;34m\] bold purple
+# \[\033[01;35m\] bold pink
+# \[\033[01;36m\] bold cyan
+# \[\033[36m\] regular cyan
+# export PS1='\[\033[01;35m\]\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00;37m\]$(__git_ps1 " (%s)") \[\033[00m\]$ '
+export PS1='\[\033[01;35m\]\h\[\033[00m\]:\[\033[36m\]\w\[\033[00;37m\]$(__git_ps1 " (%s)") \[\033[00m\]$ '
+
+
+
+# added by Anaconda3 5.0.0 installer
+# export PATH="/Users/fadeline/anaconda3/bin:$PATH"
+
+
+
+# Shell history suggest box --> https://github.com/dvorka/hstr
+
+# add this configuration to ~/.bash_profile
+export HH_CONFIG=hicolor         # get more colors
+shopt -s histappend              # append new history items to .bash_history
+export HISTCONTROL=ignorespace   # leading space hides commands from history
+export HISTFILESIZE=100000        # increase history file size (default is 500)
+export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"   # mem/file sync
+# if this is interactive shell, then bind hh to Ctrl-r (for Vi mode check doc)
+if [[ $- != .*i.* ]]; then bind '"\C-r": "\C-a hh -- \C-j"'; fi
+# vi-command mode?
+# set keymap vi-command
+
+# vi-insert mode?
+#set keymap vi-insert
+#bind '"\C-r": "\e 0 i hh -- \C-j"'
+
+
+# show normal history by default
+export HH_CONFIG=rawhistory
+
+
+
+
+############ -------------------- ############
+#### ---- MI CUSTOM
+############ -------------------- ############
+
+
+
+# colorized output for ls command
+export CLICOLOR=1
+# default LSCOLORS:
+# export LSCOLORS=exfxcxdxbxegedabagacad
+# change directory color from purple to cyan
+export LSCOLORS=gxfxcxdxbxegedabagacad
+# change other purple color to ____
+# export LSCOLORS=gxfxcxdxbxhghdabagacad
+
+
+# Tell grep to highlight matches
+export GREP_OPTIONS='--color=auto'
+
+
+
+########## ---------- PATH and ENV VAR stuff
+
+# export PATH=$PATH:/usr/local/lib/node_modules/
+# export PATH=$PATH:/usr/local/Cellar/node/11.1.0/lib/node_modules/
+export PATH=$PATH:/usr/local/mysql/bin
+
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=$HOME/go
+
+export PATH=$PATH:/Applications/CMake.app/Contents/bin
+
+# WHY
+# sequelize ... maybe
+# export PATH=$PATH:/usr/local/Cellar/node/11.1.0/bin
+# create-react-app and yarn .... maybe
+# export PATH=$PATH:/usr/local/Cellar/node/11.12.0/bin
+
+
+# llvm clang
+# export PATH=$PATH:/usr/local/opt/llvm/bin
+
+# /usr/local/opt --> symlinked to /usr/local/Cellar
+# after all this while --______-- wth
+
+# export PATH=$PATH:/usr/local/opt/gcc/bin/gcc-8
+
+
+
+
+
+########## ---------- ENV VAR stuff
+
+export LDFLAGS="-L/usr/local/opt/llvm/lib"
+export CPPFLAGS="-I/usr/local/opt/llvm/include"
+
+# LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+
+
+# --- virtualenvwrapper
+export WORKON_HOME=$HOME/virtualenvs
+export PROJECT_HOME=$HOME/projects
+export PIP_REQUIRE_VIRTUALENV=false
+# export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
+# export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+# source /usr/local/bin/virtualenvwrapper.sh
+
+
+
+# --- virtualenvwrapper with pyenv
+# to use pyenv with virtualenvwrapper, need to
+# pip install virtualenvwrapper
+# after setting pyenv local
+export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.pyenv/shims/virtualenv
+export VIRTUALENVWRAPPER_PYTHON=$HOME/.pyenv/shims/python
+source /usr/local/bin/virtualenvwrapper.sh
+
+
+
+
+# ---- nvm
+# export NVM_DIR="$HOME/.nvm"
+# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+
+
+
+########## ---------- ALIASES stuff
+##### ----- ALIASES
+
+##### ----- General
+alias l="ls"
+# list all and human readable format
+alias ll="ls -lh"
+alias la="ls -la"
+
+# always ask before rm file
+alias rm="rm -i"
+
+# case insensitive ag silver searcher except when specified CAPITALIZED
+# ag -h for help
+alias ag="ag -S"
+
+# case insensitive grep
+alias grep="grep -i"
+
+# reload bash
+alias reloadbash="source ~/.bash_profile"
+
+
+##### ----- NW BootCamp stuff
+# alias nwbc="cd $HOME/NW/git-nw"
+# alias nwgl="cd $HOME/NW/git-nw/gitlab_nwchi"
+alias nwbc="cd $HOME/Documents/NW/git-nw"
+alias nwgl="cd $HOME/Documents/NW/gitlab-nw"
+
+
+##### ----- meWS stuff
+alias ws="cd $HOME/meWS"
+alias ws-git="cd $HOME/meWS/github"
+
+
+
+# lrncode dir
+alias ws-lrncode="cd $HOME/meWS/lrncode"
+
+# edx_gtx dir
+alias ws-gtx="cd $HOME/meWS/edx_gtx"
+
+
+# exercise dir
+# alias ws-cpp="cd $HOME/meWS/cpp_stuff"
+alias ws-db="cd $HOME/meWS/exercise/db_stuff"
+alias ws-py="cd $HOME/meWS/exercise/py_stuff"
+alias ws-cpp="cd $HOME/meWS/exercise/cpp_stuff"
+alias ws-c="cd $HOME/meWS/exercise/c_stuff"
+alias ws-ml="cd $HOME/meWS/exercise/ol_code/coursera_stanford_ml"
+
+alias ws-go="cd $HOME/go/src"
+
+
+alias ws-shopify="cd $HOME/meWS/shopify"
+alias ws-elvre="cd $HOME/meWS/shopify/e_paloalto"
+alias ws-git-elvre="cd $HOME/meWS/github/e_theme"
+alias ws-proj-elvre="cd $HOME/meWS/projs/e_tools"
+
+
+alias ws-proj-fieldtp="cd $HOME/meWS/projs/fieldtp"
+alias ws-git-fieldtp="cd $HOME/meWS/github/fieldtp"
+
+
+alias ws-proj="cd $HOME/meWS/projs"
+alias ws-projsandbox="cd $HOME/meWS/projs_sandbox"
+
+
+
+##### ----- me stuff
+alias mi-docOL="cd $HOME/Documents/openLearning"
+alias mi-ebooks="cd $HOME/Documents/ebooks"
+
+
+##### ----- git stuff
+
+# git command completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+source $HOME/bin/git-prompt.sh
+alias gi='. $HOME/bin/git-info'
+
+
+
+
+
+
+
+########## ---------- function stuff
+
+
+
+# --- mi func tools
+
+function pwd-status() {
+  # my PWD case status
+  workon tools && python $HOME/bin/pwd_status.py
+  deactivate
+}
+
+
+
+
+
+
+
+function ignore-theme-css() {
+  echo '--ignore "theme.css"'
+}
+
+
+# function
+
+function asciicast2gif() {
+  # pass all params
+  # docker run --rm -v $PWD:/data asciinema/asciicast2gif "$@"
+  docker run --rm -v $PWD:/data asciinema/asciicast2gif -s 2 -t solarized-dark "$@"
+}
+
+
+function runcpp() {
+  filename=$1
+  # remove ".cpp" for outfile
+  outfile=`echo ${filename} | awk -F "." '{print $1;}'`
+
+  printf " ------ Here's your Cpp ----- \n"
+  printf " ------ Compiling ${filename} && executing ${outfile}.o ----- \n\n\n"
+
+  # compile and execute outfile
+  # g++ -Wall -Wextra ${filename} -o ${outfile}.o && ./${outfile}.o
+  # use g++ -8 version
+  g++-8 -Wall -Wextra ${filename} -o ${outfile}.o && ./${outfile}.o
+}
+
+function runc() {
+  filename=$1
+  outfile=$2
+
+  if [ -z ${outfile} ]; then
+    # default - remove ".cpp" for outfile
+    outfile=`echo ${filename} | awk -F "." '{print $1;}'`
+  else
+    echo "Outfile input: ${outfile}"
+  fi
+
+
+  printf " ------ Here's your C ----- \n"
+  printf " ------ Compiling ${filename} && executing ${outfile} ----- \n\n\n"
+
+  # compile and execute outfile
+  # gcc -Wall -Wextra ${filename} -o ${outfile} && ./${outfile}
+  # use latest version in /usr/local/opt/gcc/bin/gcc-8
+
+  gcc-8 -Wall -Wextra ${filename} -o ${outfile} && ./${outfile}
+}
+
+
+
+# --- pyenv
+# installed with brew
+
+# Please make sure eval "$(pyenv init -)"
+# is placed toward the end of the shell configuration file
+# since it manipulates PATH during the initialization.
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+
+
+
+
+# --- nvm update
+# using git repo in $NVM_DIR: ~/.nvm
+function nvm-update() {
+  ( cd "$NVM_DIR"
+    git fetch --tags origin
+    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+  ) && \. "$NVM_DIR/nvm.sh"
+}
+
+
+
+
+##### ----- fix errror
+# bash: update_terminal_cwd: command not found
+
+update_terminal_cwd() {
+    # Identify the directory using a "file:" scheme URL,
+    # including the host name to disambiguate local vs.
+    # remote connections. Percent-escape spaces.
+    local SEARCH=' '
+    local REPLACE='%20'
+    local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
+    printf '\e]7;%s\a' "$PWD_URL"
+}
+
+if [ -z "$(type -t update_terminal_cwd)" ] || [ "$(type -t update_terminal_cwd)" != "function" ]; then
+  update_terminal_cwd() {
+    true
+  }
+fi
+
+
+function colors-show() {
+    color=16;
+    while [ $color -lt 245 ]; do
+        echo -e "$color: \\033[38;5;${color}mhello\\033[48;5;${color}mworld\\033[0m"
+        ((color++));
+    done
+}
